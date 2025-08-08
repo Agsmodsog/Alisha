@@ -460,4 +460,97 @@ async def settings(client, message):
                 ),
                 InlineKeyboardButton(
                     'Single' if settings["button"] else 'Double',
-                    callback_data=f's
+                    callback_data=f'setgs#button#{settings["button"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'Bot PM',
+                    callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["botpm"] else '❌ No',
+                    callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'File Secure',
+                    callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["file_secure"] else '❌ No',
+                    callback_data=f'setgs#file_secure#{settings["file_secure"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'IMDB',
+                    callback_data=f'setgs#imdb#{settings["imdb"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["imdb"] else '❌ No',
+                    callback_data=f'setgs#imdb#{settings["imdb"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'Spell Check',
+                    callback_data=f'setgs#spell_check#{settings["spell_check"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["spell_check"] else '❌ No',
+                    callback_data=f'setgs#spell_check#{settings["spell_check"]}#{grp_id}',
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    'Welcome',
+                    callback_data=f'setgs#welcome#{settings["welcome"]}#{grp_id}',
+                ),
+                InlineKeyboardButton(
+                    '✅ Yes' if settings["welcome"] else '❌ No',
+                    callback_data=f'setgs#welcome#{settings["welcome"]}#{grp_id}',
+                ),
+            ],
+        ]
+
+        reply_markup = InlineKeyboardMarkup(buttons)
+
+        await message.reply_text(
+            text=f"<b>Change Your Settings for {title} As Your Wish ⚙</b>",
+            reply_markup=reply_markup,
+            disable_web_page_preview=True,
+            parse_mode=enums.ParseMode.HTML,
+            reply_to_message_id=message.id
+        )
+
+@Client.on_callback_query(filters.regex("checkfsub"))
+async def recheck_subscription(client, callback_query):
+    user_id = callback_query.from_user.id
+    message = callback_query.message
+    
+    try:
+        # Check membership in FORCE_SUB_1
+        member1 = await client.get_chat_member(FORCE_SUB_1, user_id)
+        if member1.status == "kicked":
+            await callback_query.answer("🚫 You are banned from accessing this bot (Channel 1).", show_alert=True)
+            return
+    except UserNotParticipant:
+        # If user is not a member of FORCE_SUB_1
+        await callback_query.answer("❌ You must join the Main Channel 1 to proceed.", show_alert=True)
+        return
+    
+    try:
+        # Check membership in FORCE_SUB_2
+        member2 = await client.get_chat_member(FORCE_SUB_2, user_id)
+        if member2.status == "kicked":
+            await callback_query.answer("🚫 You are banned from accessing this bot (Channel 2).", show_alert=True)
+            return
+    except UserNotParticipant:
+        # If user is not a member of FORCE_SUB_2
+        await callback_query.answer("❌ You must join the Main Channel 2 to proceed.", show_alert=True)
+        return
+    
+    # If user is in both channels, restart the start function
+    await start(client, message)
