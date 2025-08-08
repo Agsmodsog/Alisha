@@ -11,6 +11,13 @@ mydb = myclient[DATABASE_NAME]
 mycol = mydb['CONNECTION']   
 
 
+async def is_group_connected(group_id: int) -> bool:
+    try:
+        return mycol.count_documents({ "group_details.group_id": group_id }) > 0
+    except Exception as e:
+        logger.exception(f"Error checking group connection: {e}", exc_info=True)
+        return False
+
 async def add_connection(group_id, user_id):
     query = mycol.find_one(
         { "_id": user_id },
