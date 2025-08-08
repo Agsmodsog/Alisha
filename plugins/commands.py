@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚", "🆒", "👻", "😁","🤍","🎊"] #don't add any emoji because tg not support all emoji reactions
 
-BATCH_FILES = {}
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message: Message):
@@ -27,9 +26,10 @@ async def start(client, message: Message):
     # Group start
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [
-            [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG")],
-            [InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-             InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
+            [InlineKeyboardButton('⤬ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')],
+            [InlineKeyboardButton('📢 ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇ 📢', url="https://t.me/+RDsxY-lQ55wwOWI1")],
+            [InlineKeyboardButton('🧩 ʙᴏᴛ ᴜᴘᴅᴀᴛᴇ 🧩', url="https://t.me/AgsModsOG")],
+            [InlineKeyboardButton('🎊 ᴍᴏᴠɪᴇ ᴄʜᴀɴɴᴇʟ 🎊', url="https://t.me/+RDsxY-lQ55wwOWI1")]
         ]
 
         reply_markup = InlineKeyboardMarkup(buttons)
@@ -70,9 +70,10 @@ async def start(client, message: Message):
 
         # Show main menu buttons
         buttons = [
-            [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG1")],
-            [InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-             InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
+            [InlineKeyboardButton('⤬ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')],
+            [InlineKeyboardButton('📢 ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇ 📢', url="https://t.me/+RDsxY-lQ55wwOWI1")],
+            [InlineKeyboardButton('🧩 ʙᴏᴛ ᴜᴘᴅᴀᴛᴇ 🧩', url="https://t.me/AgsModsOG")],
+            [InlineKeyboardButton('🎊 ᴍᴏᴠɪᴇ ᴄʜᴀɴɴᴇʟ 🎊', url="https://t.me/+RDsxY-lQ55wwOWI1")]
         ]
         reply_markup = InlineKeyboardMarkup(buttons)
 
@@ -119,9 +120,10 @@ async def start(client, message: Message):
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [
-            [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG")],
-            [InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-             InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
+            [InlineKeyboardButton('⤬ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')],
+            [InlineKeyboardButton('📢 ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇ 📢', url="https://t.me/+RDsxY-lQ55wwOWI1")],
+            [InlineKeyboardButton('🧩 ʙᴏᴛ ᴜᴘᴅᴀᴛᴇ 🧩', url="https://t.me/AgsModsOG")],
+            [InlineKeyboardButton('🎊 ᴍᴏᴠɪᴇ ᴄʜᴀɴɴᴇʟ 🎊', url="https://t.me/+RDsxY-lQ55wwOWI1")]
         ]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
@@ -131,58 +133,3 @@ async def start(client, message: Message):
             parse_mode=enums.ParseMode.HTML
         )
         return
-
-@Client.on_callback_query()
-async def cb_handler(client, query: CallbackQuery):
-    data = query.data
-    if data == "help":
-        await query.message.edit_text(
-            text=script.HELP_TXT,
-            disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("About", callback_data = "about")],
-                [InlineKeyboardButton("ʜᴏᴍᴇ", callback_data = "start")]
-            ])            
-        )
-
-    elif data == "about":
-        await query.message.edit_text(
-            text=script.ABOUT_TXT,
-            disable_web_page_preview = True,
-            reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("Help", callback_data='help')],
-                [InlineKeyboardButton("ʜᴏᴍᴇ", callback_data="start")]
-            ])            
-        )
-
-
-@Client.on_callback_query(filters.regex("checkfsub"))
-async def recheck_subscription(client, callback_query):
-    user_id = callback_query.from_user.id
-    message = callback_query.message
-    
-    try:
-        # Check membership in FORCE_SUB_1
-        member1 = await client.get_chat_member(FORCE_SUB_1, user_id)
-        if member1.status == "kicked":
-            await callback_query.answer("🚫 You are banned from accessing this bot (Channel 1).", show_alert=True)
-            return
-    except UserNotParticipant:
-        # If user is not a member of FORCE_SUB_1
-        await callback_query.answer("❌ You must join the Main Channel 1 to proceed.", show_alert=True)
-        return
-    
-    try:
-        # Check membership in FORCE_SUB_2
-        member2 = await client.get_chat_member(FORCE_SUB_2, user_id)
-        if member2.status == "kicked":
-            await callback_query.answer("🚫 You are banned from accessing this bot (Channel 2).", show_alert=True)
-            return
-    except UserNotParticipant:
-        # If user is not a member of FORCE_SUB_2
-        await callback_query.answer("❌ You must join the Main Channel 2 to proceed.", show_alert=True)
-        return
-    
-    # If user is in both channels, restart the start function
-    await start(client, message)
-
