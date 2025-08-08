@@ -15,9 +15,6 @@ How Can I Help You
 
 🔹 /start – Check if I’m alive  
 🔹 /connect - To connect Group  
-🔹 /status – Bot system status  
-🔹 /info – Your user info   
-🔹 /stats – Database stats  
 🔹 /broadcast – Broadcast message (Owner only)
 
 <blockquote>📙 Nᴏᴛɪᴄᴇ:</blockquote>
@@ -31,6 +28,14 @@ How Can I Help You
 🗄️ Dᴀᴛᴀʙᴀsᴇ: Mᴏɴɢᴏ DB  
 🌐 Sᴇʀᴠᴇʀ: KᴏYᴇʙ
 </b>"""
+
+    WELCOME_TEXTS = """
+    "👋 Welcome {mention}!\n\n"
+    "You're now in **{chat}**.\n"
+    "🆔 Your User ID: `{user_id}`\n\n"
+    "Please follow the group rules and enjoy your stay!" """
+
+    
     SOURCE_TXT = """<b>📢 NOTE:</b>
 <blockquote>ᴋᴜᴛᴛᴜ ʙᴏᴛ™  Condact Develapor.</blockquote>
 
