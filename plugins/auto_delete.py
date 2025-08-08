@@ -1,25 +1,26 @@
 import asyncio
-import re
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from info import ADMINS, PINNED_EXEMPT, DELETE_AFTER_SECONDS
 
+# Time in seconds after which message will be deleted
+DELETE_AFTER = 30  # You can change this to any duration
 
-@Client.on_message(filters.group)
-async def auto_delete_message(client: Client, message: Message):
+@Client.on_message(filters.group & ~filters.via_bot)
+async def auto_delete_messages(client: Client, message: Message):
+    if not message.from_user:
+        return
+
     try:
-        # Ignore admins
-        if message.from_user and message.from_user.id in ADMINS:
-            return
-
-        # Ignore pinned messages
-        if PINNED_EXEMPT and getattr(message, "pinned_message", False):
-            return
-
-
-        # Delete after 3 minutes
-        await asyncio.sleep(DELETE_AFTER_SECONDS)
-        await message.delete()
-        
+        # Get member status to check if user is admin/creator
+        member = await client.get_chat_member(message.chat.id, message.from_user.id)
+        if member.status in ("administrator", "creator"):
+            return  # Skip admins and creator
     except Exception as e:
-        print(f"[AutoDelete] Error: {e}")
+        print(f"[AutoDelete] Couldn't check admin status: {e}")
+        return
+
+    try:
+        await asyncio.sleep(DELETE_AFTER)
+        await message.delete()
+    except Exception as e:
+        print(f"[AutoDelete] Failed to delete message: {e}")
