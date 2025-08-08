@@ -1,7 +1,7 @@
 import re
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from info import ADMIN
+from info import ADMINS
 
 # Regex to catch:
 # - URLs starting with http, https, www
@@ -15,7 +15,7 @@ async def remove_links(client: Client, message: Message):
         return
 
     user_id = message.from_user.id
-    if user_id in ADMIN_LIST:
+    if user_id in ADMINS:
         return  # Don't delete messages from admins
 
     if re.search(LINK_REGEX, message.text, flags=re.IGNORECASE):
