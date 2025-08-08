@@ -1,6 +1,6 @@
 class script(object):
     START_TXT = """<blockquote>👋🏻 Hᴇʟʟᴏ {}.</blockquote>
-𝖨’𝗆 𝖺𝗇 𝖺𝗎𝗍𝗈 𝖿𝗂𝗅𝗍𝖾𝗋 𝖻𝗈𝗍 𝗍𝗁𝖺𝗍 𝖼𝖺𝗇 𝗉𝗋𝗈𝗏𝗂𝖽𝖾 𝗆𝗈𝗏𝗂𝖾𝗌 𝗂𝗇 𝗒𝗈𝗎𝗋 𝗍𝖾𝗅𝖾𝗀𝗋𝖺𝗆 𝗀𝗋𝗈𝗎𝗉𝗌.
+How Can I Help You
 
 📍 𝖠𝖽𝖽 𝗆𝖾 𝗍𝗈 𝗒𝗈𝗎𝗋 𝗀𝗋𝗈𝗎𝗉  
 ⚡️ 𝖯𝗋𝗈𝗆𝗈𝗍𝖾 𝗆𝖾 𝖺𝗌 𝖺𝗇 𝖠𝖽𝗆𝗂𝗇
@@ -15,11 +15,9 @@ class script(object):
 <blockquote>📌 Aᴠᴀɪʟᴀʙʟᴇ Cᴏᴍᴍᴀɴᴅs:</blockquote>
 
 🔹 /start – Check if I’m alive  
-🔹 /ping – Check bot response time  
-🔹 /usage – How to use the bot  
+🔹 /connect - To connect Group  
 🔹 /status – Bot system status  
-🔹 /info – Your user info  
-🔹 /id – Get your Telegram ID  
+🔹 /info – Your user info   
 🔹 /stats – Database stats  
 🔹 /broadcast – Broadcast message (Owner only)
 
@@ -27,7 +25,7 @@ class script(object):
 ⚠️ Pʟᴇᴀsᴇ ᴅᴏɴ’ᴛ sᴘᴀᴍ ᴛʜᴇ ʙᴏᴛ. 🙂
 """
     ABOUT_TXT = """<b>
-<blockquote>🤖 Nᴀᴍᴇ: ᴋᴜᴛᴛᴜ ʙᴏᴛ™</blockquote>
+<blockquote>🤖 Nᴀᴍᴇ: Ags Bots™</blockquote>
 
 👨‍💻 Cʀᴇᴀᴛᴏʀ: <a href="https://t.me/AgsModsOG">AgsModsOG</a>  
 💬 Lᴀɴɢᴜᴀɢᴇ: Pʏᴛʜᴏɴ 3  
@@ -35,7 +33,7 @@ class script(object):
 🌐 Sᴇʀᴠᴇʀ: KᴏYᴇʙ
 </b>"""
     SOURCE_TXT = """<b>📢 NOTE:</b>
-<blockquote>ᴋᴜᴛᴛᴜ ʙᴏᴛ™ is an open source project.</blockquote>
+<blockquote>ᴋᴜᴛᴛᴜ ʙᴏᴛ™  Condact Develapor.</blockquote>
 
 🔗 <b>Source Code:</b> <a href="https://t.me/AgsModsOG">Click Here 😂</a>
 
@@ -48,8 +46,8 @@ Filters allow users to set automated replies for specific keywords. Whenever a m
 
 <b>🔒 NOTE:</b>
 1. The bot must have <b>admin privileges</b> in the chat.  
-2. Only <b>admins</b> can add or manage filters.  
-3. <b>Alert buttons</b> have a character limit of 64.
+2. Only <b>admins</b> can add or manage.  
+3. connect Me to the group
 
 <b>⚙️ Commands & Usage:</b>
 • <code>/filter</code> – Add a filter to the chat  
