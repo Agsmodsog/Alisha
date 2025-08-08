@@ -5,7 +5,7 @@ from os import getenv
 from info import DATABASE_URI, DATABASE_NAME
 
 client = AsyncIOMotorClient(DATABASE_URI)
-db = myclient[DATABASE_NAME]
+db = client[DATABASE_NAME]
 warnings = db["warnings"]
 
 async def add_warn(chat_id: int, user_id: int):
