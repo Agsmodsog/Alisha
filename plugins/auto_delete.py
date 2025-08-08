@@ -2,14 +2,14 @@ import asyncio
 import re
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from info import ADMIN, PINNED_EXEMPT, DELETE_AFTER_SECONDS
+from info import ADMINS, PINNED_EXEMPT, DELETE_AFTER_SECONDS
 
 
 @Client.on_message(filters.group & ~filters.edited)
 async def auto_delete_message(client: Client, message: Message):
     try:
         # Ignore admins
-        if message.from_user and message.from_user.id in ADMIN_LIST:
+        if message.from_user and message.from_user.id in ADMINS:
             return
 
         # Ignore pinned messages
