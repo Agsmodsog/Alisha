@@ -137,7 +137,7 @@ async def cb_handler(client, query: CallbackQuery):
     data = query.data 
     if data == "start":
         await query.message.edit_text(
-            text=Txt.START_TXT.format(query.from_user.mention),
+            text=script.START_TXT.format(query.from_user.mention),
             disable_web_page_preview=True,
             reply_markup = InlineKeyboardMarkup([
                 [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG"),
@@ -147,7 +147,7 @@ async def cb_handler(client, query: CallbackQuery):
         )
     elif data == "help":
         await query.message.edit_text(
-            text=Txt.HELP_TXT,
+            text=script.HELP_TXT,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("About", callback_data = "about")],
@@ -157,7 +157,7 @@ async def cb_handler(client, query: CallbackQuery):
 
     elif data == "about":
         await query.message.edit_text(
-            text=Txt.ABOUT_TXT,
+            text=script.ABOUT_TXT,
             disable_web_page_preview = True,
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("Help", callback_data='help')],
