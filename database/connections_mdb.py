@@ -12,20 +12,6 @@ mycol = mydb['CONNECTION']
 
 
 
-async def get_connected_group(user_id: int) -> int | None:
-    try:
-        query = mycol.find_one(
-            {"_id": user_id},
-            {"_id": 0, "active_group": 1}
-        )
-        if query and query.get("active_group"):
-            return int(query["active_group"])
-        return None
-    except Exception as e:
-        logger.exception(f"Error fetching connected group: {e}", exc_info=True)
-        return None
-
-
 async def is_group_connected(group_id: int) -> bool:
     try:
         return mycol.count_documents({ "group_details.group_id": group_id }) > 0
