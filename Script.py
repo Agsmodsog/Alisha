@@ -27,14 +27,7 @@ How Can I Help You
 💬 Lᴀɴɢᴜᴀɢᴇ: Pʏᴛʜᴏɴ 3  
 🗄️ Dᴀᴛᴀʙᴀsᴇ: Mᴏɴɢᴏ DB  
 🌐 Sᴇʀᴠᴇʀ: KᴏYᴇʙ
-</b>"""
-
-    WELCOME_TEXTS = """
-    "👋 Welcome {mention}!\n\n"
-    "You're now in **{chat}**.\n"
-    "🆔 Your User ID: `{user_id}`\n\n"
-    "Please follow the group rules and enjoy your stay!" """
-
+</b>""
     
     SOURCE_TXT = """<b>📢 NOTE:</b>
 <blockquote>ᴋᴜᴛᴛᴜ ʙᴏᴛ™  Condact Develapor.</blockquote>
