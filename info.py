@@ -21,7 +21,7 @@ BOT_TOKEN = environ.get('BOT_TOKEN', '8213833916:AAH2ch22_n8jBaHQGcLqU_fBQyq5X_V
 # Bot settings
 BOT_START_TIME = time()
 CACHE_TIME = int(environ.get('CACHE_TIME', 1000))
-USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True))
+USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True)) 
 PICS = (environ.get('PICS', 'https://envs.sh/Qfk.jpg/IMG2025080894.jpg')).split()
 
 # Admins, Channels & Users
@@ -56,6 +56,7 @@ IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", "🏷 𝖳𝗂𝗍𝗅𝖾: <a href
 LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "True"), False)
 SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "True"), True)
 MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
+WELCOME_IMAGE_URL =  (environ.get('WELCOME_IMAGE_URL', 'https://envs.sh/hzQ.jpg/IMG20250808217.jpg'))
 INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
 FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '-1002801544620')).split()]
 MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "True")), True)
