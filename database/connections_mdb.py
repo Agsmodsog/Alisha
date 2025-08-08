@@ -11,6 +11,21 @@ mydb = myclient[DATABASE_NAME]
 mycol = mydb['CONNECTION']   
 
 
+
+async def get_connected_group(user_id: int) -> int | None:
+    try:
+        query = mycol.find_one(
+            {"_id": user_id},
+            {"_id": 0, "active_group": 1}
+        )
+        if query and query.get("active_group"):
+            return int(query["active_group"])
+        return None
+    except Exception as e:
+        logger.exception(f"Error fetching connected group: {e}", exc_info=True)
+        return None
+
+
 async def is_group_connected(group_id: int) -> bool:
     try:
         return mycol.count_documents({ "group_details.group_id": group_id }) > 0
@@ -105,6 +120,19 @@ async def make_inactive(user_id):
         {"$set": {"active_group" : None}}
     )
     return update.modified_count != 0
+
+
+async def get_user_by_group(group_id: int) -> int | None:
+    try:
+        query = mycol.find_one(
+            {"group_details.group_id": group_id},
+            {"_id": 1}
+        )
+        return query["_id"] if query else None
+    except Exception as e:
+        logger.exception(f"Error getting user by group: {e}", exc_info=True)
+        return None
+
 
 
 async def delete_connection(user_id, group_id):
