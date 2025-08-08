@@ -9,8 +9,7 @@ How Can I Help You
 
 <blockquote>©️ Maintained by <a href="https://t.me/AgsModsOG">@AgsModsOG</a></blockquote>"""
 
-    HELP_TXT = """
-<blockquote>🙋🏻‍♂️ Hᴇʟʟᴏ {} 🤓</blockquote>
+    HELP_TXT = """<blockquote>🙋🏻‍♂️ Hᴇʟʟᴏ {}.</blockquote>
 
 <blockquote>📌 Aᴠᴀɪʟᴀʙʟᴇ Cᴏᴍᴍᴀɴᴅs:</blockquote>
 
