@@ -1,26 +1,33 @@
 import asyncio
 from pyrogram import Client, filters
-from pyrogram.types import Message
+from pyrogram.types import Message, ChatMember
 
-# Time in seconds after which message will be deleted
-DELETE_AFTER = 30  # You can change this to any duration
+# Time (in seconds) before deletion
+DELETE_AFTER = 60
 
-@Client.on_message(filters.group & ~filters.via_bot)
-async def auto_delete_messages(client: Client, message: Message):
-    if not message.from_user:
-        return
-
+async def is_admin(client: Client, chat_id: int, user_id: int) -> bool:
     try:
-        # Get member status to check if user is admin/creator
-        member = await client.get_chat_member(message.chat.id, message.from_user.id)
-        if member.status in ("administrator", "creator"):
-            return  # Skip admins and creator
+        member: ChatMember = await client.get_chat_member(chat_id, user_id)
+        return member.status in ("administrator", "creator")
     except Exception as e:
-        print(f"[AutoDelete] Couldn't check admin status: {e}")
-        return
+        print(f"[AutoDelete] Failed to get chat member: {e}")
+        return False
 
+
+@Client.on_message(filters.text & ~filters.via_bot)
+async def auto_delete_text(client: Client, message: Message):
     try:
-        await asyncio.sleep(DELETE_AFTER)
-        await message.delete()
+        # If private chat → delete all text after 60s
+        if message.chat.type == "private":
+            await asyncio.sleep(DELETE_AFTER)
+            await message.delete()
+
+        # If group/supergroup → delete text unless from admin
+        elif message.chat.type in ["group", "supergroup"]:
+            if await is_admin(client, message.chat.id, message.from_user.id):
+                return  # Don't delete admin messages
+            await asyncio.sleep(DELETE_AFTER)
+            await message.delete()
+
     except Exception as e:
-        print(f"[AutoDelete] Failed to delete message: {e}")
+        print(f"[AutoDelete] Error: {e}")
