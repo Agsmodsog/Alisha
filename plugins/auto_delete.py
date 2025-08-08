@@ -5,7 +5,7 @@ from pyrogram.types import Message
 from info import ADMINS, PINNED_EXEMPT, DELETE_AFTER_SECONDS
 
 
-@Client.on_message(filters.group & ~filters.edited)
+@Client.on_message(filters.group)
 async def auto_delete_message(client: Client, message: Message):
     try:
         # Ignore admins
