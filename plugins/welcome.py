@@ -3,8 +3,8 @@ from pyrogram.types import Message
 from database.connections_mdb import get_connected_group
 from info import ADMINS
 from pyrogram.enums import ChatType
+from script import WELCOME_TEXTS
 
-WELCOME_TEXTS = {}
 
 # Check if user is admin in connected group
 async def is_admin(client, user_id, chat_id):
