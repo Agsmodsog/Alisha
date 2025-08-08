@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, ChatPermissions
 from pyrogram.enums import ChatMemberStatus
-from script import *
+from Script import *
 from info import *
 
 # Only react to group join events
