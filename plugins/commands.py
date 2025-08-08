@@ -27,7 +27,7 @@ async def start(client, message: Message):
     # Group start
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [
-            [InlineKeyboardButton('📢 ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇ 📢', url="https://t.me/+RDsxY-lQ55wwOWI1")],
+            [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG")],
             [InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
              InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
         ]
@@ -70,7 +70,7 @@ async def start(client, message: Message):
 
         # Show main menu buttons
         buttons = [
-            [InlineKeyboardButton('📢 ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇ 📢', url="https://t.me/+RDsxY-lQ55wwOWI1")],
+            [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG1")],
             [InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
              InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
         ]
@@ -119,7 +119,7 @@ async def start(client, message: Message):
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [
-            [InlineKeyboardButton('📢 ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇ 📢', url="https://t.me/+RDsxY-lQ55wwOWI1")],
+            [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG")],
             [InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
              InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
         ]
@@ -131,6 +131,39 @@ async def start(client, message: Message):
             parse_mode=enums.ParseMode.HTML
         )
         return
+
+@Client.on_callback_query()
+async def cb_handler(client, query: CallbackQuery):
+    data = query.data 
+    if data == "start":
+        await query.message.edit_text(
+            text=Txt.START_TXT.format(query.from_user.mention),
+            disable_web_page_preview=True,
+            reply_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG"),
+                InlineKeyboardButton('• ʜᴇʟᴘ •', callback_data='help')],
+                [InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
+            ])
+        )
+    elif data == "help":
+        await query.message.edit_text(
+            text=Txt.HELP_TXT,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("About", callback_data = "about")],
+                [InlineKeyboardButton("ʜᴏᴍᴇ", callback_data = "start")]
+            ])            
+        )
+
+    elif data == "about":
+        await query.message.edit_text(
+            text=Txt.ABOUT_TXT,
+            disable_web_page_preview = True,
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Help", callback_data='help')],
+                [InlineKeyboardButton("ʜᴏᴍᴇ", callback_data="start")]
+            ])            
+        )
 
 
 @Client.on_message(filters.command('logs') & filters.user(ADMINS))
