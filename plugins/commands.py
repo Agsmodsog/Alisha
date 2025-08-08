@@ -174,7 +174,34 @@ async def log_file(bot, message):
     except Exception as e:
         await message.reply(str(e))
 
+@Client.on_message(filters.command("id"))
+async def id_cmd(client: Client, message: Message):
+    text = f"🆔 **User ID**: `{message.from_user.id}`\n"
+    text += f"👥 **Chat ID**: `{message.chat.id}`\n"
+    if message.reply_to_message:
+        text += f"💬 **Replied Msg ID**: `{message.reply_to_message.message_id}`"
+    await message.reply_text(text)
 
+# /broadcast command (admin only)
+@Client.on_message(filters.command("broadcast") & filters.user(ADMINS))
+async def broadcast_cmd(client: Client, message: Message):
+    if not message.reply_to_message:
+        return await message.reply("❌ Reply to a message to broadcast.")
+
+    success = 0
+    fail = 0
+    text = message.reply_to_message.text or message.reply_to_message.caption or "No content"
+    users = await get_all_users()
+
+    for user_id in users:
+        try:
+            await client.send_message(user_id, text)
+            success += 1
+            await asyncio.sleep(0.1)  # Sleep to avoid hitting flood limits
+        except Exception:
+            fail += 1
+
+    await message.reply_text(f"✅ Broadcast sent to {success} users.\n❌ Failed to send to {fail} users.")
 
 @Client.on_message(filters.command('deleteall') & filters.user(ADMINS))
 async def delete_all_index(bot, message):
