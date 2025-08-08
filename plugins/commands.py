@@ -134,18 +134,8 @@ async def start(client, message: Message):
 
 @Client.on_callback_query()
 async def cb_handler(client, query: CallbackQuery):
-    data = query.data 
-    if data == "start":
-        await query.message.edit_text(
-            text=script.START_TXT.format(user_mention, temp.U_NAME, temp.B_NAME),
-            disable_web_page_preview=True,
-            reply_markup = InlineKeyboardMarkup([
-                [InlineKeyboardButton('♻ ᴅᴇᴠᴇʟᴏᴘᴇʀ ♻', url="https://t.me/AgsModsOG"),
-                InlineKeyboardButton('• ʜᴇʟᴘ •', callback_data='help')],
-                [InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')]
-            ])
-        )
-    elif data == "help":
+    data = query.data
+    if data == "help":
         await query.message.edit_text(
             text=script.HELP_TXT,
             disable_web_page_preview=True,
