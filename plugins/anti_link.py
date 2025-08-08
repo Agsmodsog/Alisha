@@ -1,101 +1,108 @@
 import re
 import asyncio
 from pyrogram import Client, filters
-from pyrogram.types import Message
+from pyrogram.enums import ChatMemberStatus
+from pyrogram.types import Message, ChatMemberUpdated
 from info import ADMINS, LOG_CHANNEL
-from database.users_chats_db import add_user
+from database.warn_db import add_warn, get_warn_count, reset_warn_count
 
-# Dictionary to store warning counts
-user_warnings = {}
+link_regex = re.compile(r"(https?://\S+|t\.me/\S+|telegram\.me/\S+)", re.IGNORECASE)
 
-# Link detection pattern
-link_pattern = re.compile(r"(https?://|www\.)\S+")
-
-# Check if user is admin
-async def is_admin(client: Client, message: Message):
-    member = await message.chat.get_member(message.from_user.id)
-    return member.status in ["administrator", "creator"]
-
-# Check if bot is admin
-async def bot_is_admin(client: Client, message: Message):
-    bot = await message.chat.get_member(client.me.id)
-    return bot.status == "administrator"
-
-@Client.on_message(filters.group & filters.text, group=1)
-async def delete_link(client, message: Message):
-    if not await bot_is_admin(client, message):
+@Client.on_message(filters.group & filters.text & ~filters.private)
+async def anti_link_checker(client: Client, message: Message):
+    if not message.from_user or message.sender_chat:
         return
 
-    user_id = message.from_user.id
+    user = message.from_user
     chat_id = message.chat.id
-    text = message.text
+    user_id = user.id
 
-    # Don't process if user is admin
-    if await is_admin(client, message):
-        return
+    if message.text and link_regex.search(message.text):
+        member = await client.get_chat_member(chat_id, user_id)
 
-    # If link detected
-    if link_pattern.search(text):
-        try:
-            await message.delete()
-        except:
-            pass
-
-        user_warnings.setdefault((chat_id, user_id), 0)
-        user_warnings[(chat_id, user_id)] += 1
-        count = user_warnings[(chat_id, user_id)]
-
-        warn_text = f"⚠️ Warning {count}/3: Sending links is not allowed!"
-        await message.reply_text(warn_text, quote=True)
-
-        # Kick after 3 warnings
-        if count >= 3:
+        if member.status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
             try:
-                await client.kick_chat_member(chat_id, user_id)
-                user_warnings.pop((chat_id, user_id))
-
-                log_text = f"🚫 User [{message.from_user.first_name}](tg://user?id={user_id}) was kicked for sending links 3 times in {message.chat.title}."
-                for admin_id in ADMINS:
-                    try:
-                        await client.send_message(admin_id, log_text)
-                    except:
-                        pass
-                await client.send_message(LOG_CHANNEL, log_text)
-            except:
+                await message.delete()
+            except Exception:
                 pass
 
-@Client.on_message(filters.group, group=2)
-async def auto_delete_messages(client, message: Message):
-    if not await bot_is_admin(client, message):
+            warn_count = await add_warn(chat_id, user_id)
+
+            if warn_count >= 3:
+                try:
+                    await client.ban_chat_member(chat_id, user_id)
+                    await message.reply_text(
+                        f"🚫 [{user.first_name}](tg://user?id={user.id}) banned for repeated link sharing.",
+                        disable_web_page_preview=True
+                    )
+
+                    log_msg = (
+                        f"🚫 **User Banned for Link Spam**\n\n"
+                        f"👤 User: [{user.first_name}](tg://user?id={user.id}) (`{user.id}`)\n"
+                        f"💬 Group: {message.chat.title} (`{chat_id}`)\n"
+                        f"📛 Reason: 3x link spam"
+                    )
+
+                    for admin_id in ADMINS:
+                        try:
+                            await client.send_message(admin_id, log_msg)
+                        except Exception:
+                            pass
+
+                    await client.send_message(LOG_CHANNEL, log_msg)
+                    await reset_warn_count(chat_id, user_id)
+                except Exception as e:
+                    print(f"Error banning user {user_id}: {e}")
+            else:
+                await message.reply_text(
+                    f"⚠️ Link sharing is not allowed!\n"
+                    f"Warning {warn_count}/3 for [{user.first_name}](tg://user?id={user.id}).",
+                    disable_web_page_preview=True
+                )
+
+@Client.on_chat_member_updated()
+async def member_kicked_or_banned(client: Client, chat_member: ChatMemberUpdated):
+    old = chat_member.old_chat_member
+    new = chat_member.new_chat_member
+    chat = chat_member.chat
+    user = new.user
+
+    if (
+        old.status not in [ChatMemberStatus.BANNED, ChatMemberStatus.KICKED]
+        and new.status in [ChatMemberStatus.BANNED, ChatMemberStatus.KICKED]
+    ):
+        message = (
+            f"🚫 **Member Removed**\n\n"
+            f"👤 User: [{user.first_name}](tg://user?id={user.id}) (`{user.id}`)\n"
+            f"💬 Group: {chat.title} (`{chat.id}`)\n"
+            f"📛 Status: {new.status.capitalize()}"
+        )
+
+        for admin_id in ADMINS:
+            try:
+                await client.send_message(admin_id, message)
+            except Exception as e:
+                print(f"Failed to notify admin {admin_id}: {e}")
+
+        try:
+            await client.send_message(LOG_CHANNEL, message)
+        except Exception as e:
+            print(f"Failed to send log to LOG_CHANNEL: {e}")
+
+@Client.on_message(filters.group & ~filters.service)
+async def auto_delete_after_delay(client: Client, message: Message):
+    if message.pinned:
         return
 
-    # Skip admin messages and pinned messages
-    if await is_admin(client, message) or message.pinned_message:
+    try:
+        member = await client.get_chat_member(message.chat.id, message.from_user.id)
+        if member.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
+            return
+    except:
         return
 
-    # Delete message after 180 seconds (3 minutes)
-    await asyncio.sleep(180)
+    await asyncio.sleep(180)  # 3 minutes
     try:
         await message.delete()
     except:
         pass
-
-@Client.on_chat_member_updated(filters.group, group=3)
-async def notify_admin_on_ban(client, member_update):
-    if not await bot_is_admin(client, member_update):
-        return
-
-    old_status = member_update.old_chat_member.status
-    new_status = member_update.new_chat_member.status
-    user = member_update.new_chat_member.user
-
-    # If member is kicked or banned
-    if old_status in ["member", "restricted"] and new_status in ["kicked", "banned"]:
-        msg = f"🚨 User [{user.first_name}](tg://user?id={user.id}) was removed from **{member_update.chat.title}**."
-
-        for admin_id in ADMINS:
-            try:
-                await client.send_message(admin_id, msg)
-            except:
-                pass
-        await client.send_message(LOG_CHANNEL, msg)
