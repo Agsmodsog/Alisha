@@ -27,7 +27,7 @@ How Can I Help You
 💬 Lᴀɴɢᴜᴀɢᴇ: Pʏᴛʜᴏɴ 3  
 🗄️ Dᴀᴛᴀʙᴀsᴇ: Mᴏɴɢᴏ DB  
 🌐 Sᴇʀᴠᴇʀ: KᴏYᴇʙ
-</b>""
+</b>"""
     
     SOURCE_TXT = """<b>📢 NOTE:</b>
 <blockquote>ᴋᴜᴛᴛᴜ ʙᴏᴛ™  Condact Develapor.</blockquote>
