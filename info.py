@@ -41,6 +41,9 @@ DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://god:god@cluster0.aklb7
 DATABASE_NAME = environ.get('DATABASE_NAME', "cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'files')
 
+PINNED_EXEMPT = True  # Skip pinned messages
+DELETE_AFTER_SECONDS = 60  # 3 minutes in seconds
+
 # Others
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002801544620'))
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'Movies_Hub_OG')
